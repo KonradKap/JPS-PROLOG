@@ -5,8 +5,11 @@
 main :-
     ensure_loaded(graph),
     ensure_loaded(utility),
+    ensure_loaded(astar),
     %trace, %debug
-    print_edges(s),
+    start_A_star(PathCost),
+    printl(["Cost: ", PathCost]),
+    %print_edges(),
     halt.
 
 main :-

@@ -16,22 +16,22 @@ goal(t).
 
 %hScore(identifier, straight_line_distance_to_t)
 %These are edges actually
-town(s, 10).
-town(a, 8).
-town(b, 3).
-town(c, 4).
-town(d, 5).
-town(t, 0).
-town(e, 3).
+hScore(s, 10).
+hScore(a, 8).
+hScore(b, 3).
+hScore(c, 4).
+hScore(d, 5).
+hScore(t, 0).
+hScore(e, 3).
 
-%succ(from, Action (???), to, cost)
+%succ(from, Action (???), cost, to)
 %where succ really means edge, just for the sake of complying to examples
-succ(s, sa, a, 10).
-succ(a, ab, b, 8).
-succ(a, ac, c, 4).
-succ(c, ca, a, 4). %this edge creates cycle in the graph, comment if you can't handle it
-succ(c, cs, s, 6). %this edge creates cycle in the graph, comment if you can't handle it
-succ(c, cd, d, 2).
-succ(c, ct, t, 4).
-succ(d, dt, t, 6).
-succ(t, te, e, 4).
+succ(s, sa, 10, a).
+succ(a, ab, 8, b).
+succ(a, ac, 4, c).
+succ(c, ca, 4, a). %this edge creates cycle in the graph, comment if you can't handle it
+succ(c, cs, 6, s). %this edge creates cycle in the graph, comment if you can't handle it
+succ(c, cd, 2, d).
+succ(c, ct, 4, t).
+succ(d, dt, 6, t).
+succ(t, te, 4, e).
