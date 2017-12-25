@@ -1,4 +1,4 @@
-:- ensure_loaded(graph).
+:- ensure_loaded(tree).
 :- ensure_loaded(utility).
 
 start_A_star(PathCost) :-
@@ -11,7 +11,6 @@ start_A_star(InitState, PathCost) :-
 
 search_A_star(Queue, ClosedSet, PathCost) :-
     fetch(Node, Queue, ClosedSet, RestQueue),
-    write("Now looking up: "), print_node(Node),
     continue(Node, RestQueue, ClosedSet, PathCost).
 
 continue(node(State, Action, Parent, Cost, _), _, ClosedSet, path_cost(Path, Cost)) :-
@@ -20,16 +19,15 @@ continue(node(State, Action, Parent, Cost, _), _, ClosedSet, path_cost(Path, Cos
 
 continue(Node, RestQueue, ClosedSet, Path) :-
     expand(Node, NewNodes),
-    insert_new_nodes(NewNodes, RestQueue, NewQueue),
+    write("Expanding: "), print_node(Node),
+    ask_for_order(NewNodes, Order, print_node), nl,
+    reorder(NewNodes, Order, Ordered),
+    append(Ordered, RestQueue, NewQueue),
     search_A_star(NewQueue, [Node|ClosedSet], Path).
 
 fetch(node(State, Action, Parent, Cost, Score),
         [node(State, Action, Parent, Cost, Score)|RestQueue], ClosedSet, RestQueue) :-
-    not(member(node(State, _, _, _, _), ClosedSet)), !,
-    %write("Queue state is: "), nl,
-    %print_nodes([node(State, Action, Parent, Cost, Score)|RestQueue]).
-    ask_for_order([node(State, Action, Parent, Cost, Score)|RestQueue], Order),
-    write(Order).
+    not(member(node(State, _, _, _, _), ClosedSet)), !.
 
 fetch(Node, [_|RestQueue], ClosedSet, NewRest) :-
     fetch(Node, RestQueue, ClosedSet , NewRest).
@@ -44,24 +42,6 @@ score(State, ParentCost, StepCost, Cost, FScore) :-
     hScore(State, HScore),
     FScore is Cost + HScore.
 
-insert_new_nodes([], Queue, Queue).
-
-insert_new_nodes([Node|RestNodes], Queue, NewQueue) :-
-    insert_p_queue(Node, Queue, Queue1),
-    insert_new_nodes(RestNodes, Queue1, NewQueue).
-
-insert_p_queue(Node, [], [Node]) :-
-    !.
-
-insert_p_queue(node(State, Action, Parent, Cost, FScore),
-        [node(State1, Action1, Parent1, Cost1, FScore1)|RestQueue],
-        [node(State1, Action1, Parent1, Cost1, FScore1)|Rest1]) :-
-    FScore >= FScore1, !,
-    insert_p_queue(node(State, Action, Parent, Cost, FScore), RestQueue, Rest1).
-
-insert_p_queue(node(State, Action, Parent, Cost, FScore), Queue,
-        [node(State, Action, Parent, Cost, FScore)|Queue]).
-
 build_path(node(nil, _, _, _, _ ), _, Path, Path) :-
     !.
 
@@ -74,4 +54,3 @@ del([X|R], X, R).
 del([Y|R], X, [Y|R1]) :-
     X \= Y,
     del(R, X, R1).
-

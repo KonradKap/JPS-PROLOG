@@ -2,7 +2,7 @@
 
 :- initialization main.
 
-:- ensure_loaded(graph).
+:- ensure_loaded(tree).
 :- ensure_loaded(utility).
 :- ensure_loaded(astar).
 

@@ -1,4 +1,4 @@
-:- ensure_loaded(graph).
+:- ensure_loaded(tree).
 
 printl([]) :-
     nl.
@@ -40,15 +40,15 @@ map_indices([Elem|RestList], Index, [Elem/Index|RestIndices]) :-
     NextIndex is Index + 1,
     map_indices(RestList, NextIndex, RestIndices).
 
-print_indices_list(List) :-
-    p_print_indices_list(List, 0).
+print_indices_list(List, PrintFunction) :-
+    p_print_indices_list(List, 0, PrintFunction).
 
-p_print_indices_list([], _).
+p_print_indices_list([], _, _).
 
-p_print_indices_list([Elem/_|IndicesList], Index) :-
-    printl([Index, ": ", Elem]),
+p_print_indices_list([Elem/_|IndicesList], Index, PrintFunction) :-
+    write(Index), write(": "), call(PrintFunction, Elem),
     NewIndex is Index + 1,
-    p_print_indices_list(IndicesList, NewIndex).
+    p_print_indices_list(IndicesList, NewIndex, PrintFunction).
 
 read_index_of_list(List, Index) :-
     read(Index),
@@ -71,16 +71,26 @@ p_remove_nth([Elem|List], Index, Index, RetList, Elem) :-
     NewCurrent is Index + 1,
     p_remove_nth(List, Index, NewCurrent, RetList, Elem).
 
-ask_for_order(List, Order) :-
+ask_for_order(List, Order, PrintFunction) :-
     map_indices(List, IndicesList),
-    p_ask_for_order(IndicesList, [], Order).
+    p_ask_for_order(IndicesList, [], Order, PrintFunction).
 
-p_ask_for_order([], Read, Read).
+p_ask_for_order([], Read, Read, _).
 
-p_ask_for_order(IndicesList, Read, Order) :-
-    print_indices_list(IndicesList), nl,
+p_ask_for_order(IndicesList, Read, Order, PrintFunction) :-
+    print_indices_list(IndicesList, PrintFunction), nl,
     write("Which one do you want to be evaluated next?"),
     read_index_of_list(IndicesList, Index),
-    remove_nth(IndicesList, Index, NewList, Deleted/Id),
+    remove_nth(IndicesList, Index, NewList, _/Id),
     append(Read, [Id], NewRead),
-    p_ask_for_order(NewList, NewRead, Order).
+    p_ask_for_order(NewList, NewRead, Order, PrintFunction).
+
+reorder(List, Order, Ordered) :-
+    p_reorder(List, Order, [], Ordered).
+
+p_reorder(_, [], Partial, Partial).
+
+p_reorder(List, [Index|Order], Partial, Ordered) :-
+    nth0(Index, List, Elem),
+    append(Partial, [Elem], NewPartial),
+    p_reorder(List, Order, NewPartial, Ordered).
