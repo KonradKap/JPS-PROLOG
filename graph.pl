@@ -1,4 +1,4 @@
-%                E[3]
+%             E[3]
 %              4^
 %              /
 %      6.-->T[0]
@@ -7,7 +7,7 @@
 %          ''C[4]<,
 %             |    \4
 %             |6    '>       ....>B[3]
-%             v   ..>A[8]'''8
+%             v    ..>A[8]'''8
 %           S[10]''10
 :- style_check(-singleton).
 
@@ -15,7 +15,7 @@ start(s).
 goal(t).
 
 %hScore(identifier, straight_line_distance_to_t)
-%These are edges actually
+%These are nodes actually
 hScore(s, 10).
 hScore(a, 8).
 hScore(b, 3).
@@ -32,6 +32,6 @@ succ(a, ac, 4, c).
 succ(c, ca, 4, a). %this edge creates cycle in the graph, comment if you can't handle it
 succ(c, cs, 6, s). %this edge creates cycle in the graph, comment if you can't handle it
 succ(c, cd, 2, d).
-succ(c, ct, 4, t).
+succ(c, ct, 14, t).
 succ(d, dt, 6, t).
 succ(t, te, 4, e).
