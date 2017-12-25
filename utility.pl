@@ -7,29 +7,9 @@ printl([Elem|Rest]) :-
     write(Elem),
     printl(Rest).
 
-print_edges() :-
-    start(S),
-    print_edges(S).
-
-print_edges(Start) :-
-    print_edges(Start, []).
-
-print_edges(Node, Visited) :-
-    not(member(Node, Visited)),
-    succ(Node, _, Cost, Next),
-    printl([Node, "->", Next, ": ", Cost]),
-    print_edges(Next, [Node|Visited]).
-
 print_node(node(To, Action, From, CostUntil, CostFull)) :-
     FutureCost is CostFull - CostUntil,
     printl([CostUntil, " {", From, "}--", Action, "->{", To, "} ", FutureCost]).
-
-print_nodes([]) :-
-    nl.
-
-print_nodes([Node|Rest]) :-
-    print_node(Node),
-    print_nodes(Rest).
 
 map_indices(List, IndicesList) :-
     map_indices(List, 0, IndicesList).

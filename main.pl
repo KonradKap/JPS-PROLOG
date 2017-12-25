@@ -11,7 +11,7 @@ main :-
     start_A_star(path_cost(Path, Cost)),
     printl(["Path is: "]),
     pretty_print(Path),
-    printl(["For: ", Cost]),
+    printl(["Cost: ", Cost]),
     halt.
 
 main :-
