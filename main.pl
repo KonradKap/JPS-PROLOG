@@ -9,7 +9,8 @@ shown_queue_size(5).
 
 main :-
     %trace, %debug
-    start_A_star(path_cost(Path, Cost), graph),
+    a_star(path_cost(Path, Cost), tree, 1, 5),
+    %start_A_star(path_cost(Path, Cost), graph),
     printl(["Path is: "]),
     pretty_print(Path),
     printl(["Cost: ", Cost]),
